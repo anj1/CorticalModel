@@ -14,3 +14,7 @@ function getindex(tb::TemporalBuffer, i, t)
 	j = round(Int, floor(t/tb.dt))
 	return tb.buf[i, j]
 end 
+
+function set_index!(tb::TemporalBuffer, x, i)
+	tb.buf[i, 1] = x
+end

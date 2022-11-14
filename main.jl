@@ -63,6 +63,8 @@ function sim_step!(net::NeuronNet)
 			sim_step!(pop_post, pop_pre, weights) 
 		end 
 		
+		activate!(pop_post) 
+		
 		new_pops[pop_post_key] = pop_post 
 	end 
 	
