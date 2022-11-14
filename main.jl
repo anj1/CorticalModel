@@ -6,15 +6,23 @@ struct NeuronPopulation
 	v::TemporalBuffer{Float32}
 	delays
 	
-	function NeuronPopulation(dt, delays)
-		max_time = maximum(delays) 
-		n_neurons = length(delays)
-		
-		max_timesteps = ceil(round(Int, max_time/dt))
+    function NeuronPopulation(v::TemporalBuffer{Float32}, delays)
+        new(v, delays)
+    end 
+end 
+
+function NeuronPopulation(dt, delays)
+    max_time = maximum(delays) 
+	n_neurons = length(delays)
+    
+	max_timesteps = ceil(round(Int, max_time/dt))
 	
-		tb = TemporalBuffer{Float32}(dt, zeros(n_neurons, max_timesteps))
-		new(tb, delays)
-	end 
+	tb = TemporalBuffer{Float32}(dt, zeros(n_neurons, max_timesteps))
+	return NeuronPopulation(tb, delays)
+end 
+
+function Base.copy(pop::NeuronPopulation)
+    return NeuronPopulation(copy(pop.v), copy(pop.delays))
 end 
 
 mutable struct NeuronNet
@@ -51,14 +59,15 @@ function sim_step!(net::NeuronNet)
 	new_pops = Dict{String, NeuronPopulation}()
 	
 	pop_keys = keys(net.pops)
-	for pop_post_key in pop_names 
+	for pop_post_key in pop_keys
+        @show pop_post_key
 		pop_post = copy(net.pops[pop_post_key])
 		
 		advance!(pop_post.v)
 		
-		for pop_pre_key in pop_names
-			pop_pre = net.pops[pop_pre_name]
-			weights = net.weights[(pop_pre, pop_post)]
+		for pop_pre_key in pop_keys
+			pop_pre = net.pops[pop_pre_key]
+			weights = net.weights[(pop_pre_key, pop_post_key)]
 			
 			sim_step!(pop_post, pop_pre, weights) 
 		end 
