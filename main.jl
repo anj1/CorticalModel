@@ -5,6 +5,16 @@ include("temporal_buffer.jl")
 struct NeuronPopulation
 	v::TemporalBuffer{Float32}
 	delays
+	
+	function NeuronPopulation(dt, delays)
+		max_time = maximum(delays) 
+		n_neurons = length(delays)
+		
+		max_timesteps = ceil(round(Int, max_time/dt))
+	
+		tb = TemporalBuffer{Float32}(dt, zeros(n_neurons, max_timesteps))
+		new(tb, delays)
+	end 
 end 
 
 mutable struct NeuronNet
