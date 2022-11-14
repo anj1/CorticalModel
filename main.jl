@@ -1,16 +1,24 @@
 using Unitful 
 
-mutable struct NeuronNet
-	pops::Dict{String, NeuronPopulation}
-	weights::Dict{Tuple{String,String}, AbstractArray}
-end 
+include("temporal_buffer.jl")
 
 struct NeuronPopulation
 	v::TemporalBuffer{Float32}
 	delays
 end 
 
-function v_after_delay(pop:NeuronPopulation)
+mutable struct NeuronNet
+	pops::Dict{String, NeuronPopulation}
+	weights::Dict{Tuple{String,String}, AbstractArray}
+	
+	function NeuronNet()
+		pops = Dict{String, NeuronPopulation}()
+		weights = Dict{Tuple{String,String}, AbstractArray}()
+		new(pops, weights)
+	end
+end 
+
+function v_after_delay(pop::NeuronPopulation)
 	v = Array{Float32}(undef, (length(pop.v),))
 	
 	for i = 1:length(pop.v)
@@ -20,10 +28,13 @@ function v_after_delay(pop:NeuronPopulation)
 	return v
 end 
 
-function sim_step!(pop_post::NeuronPopulation, pop_pre::NeuronPopulation, weights)
-	# Get voltages feeding from presynaptic neurons to postsynaptic neurons, 
-	# taking delay into account. 
-	v = 
+
+function sim_step!(pop::NeuronPopulation, v::Vector{Float32}, weights::AbstractArray)
+  # update postsynaptic population given incident voltages
+
+  # calculate v_out
+  # v_out = your equation, including action potentials, ...
+  # pop.v += ...
 end 
 
 function sim_step!(net::NeuronNet)
