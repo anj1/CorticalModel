@@ -1,5 +1,8 @@
 using Unitful 
 
+import Base.getindex
+import Base.setindex!
+
 mutable struct TemporalBuffer{T}
 	dt   # Smallest time interval
 	buf::Array{T, 2}
@@ -10,15 +13,15 @@ function advance!(tb::TemporalBuffer{T}) where T
 	tb.buf = hcat(zeros(T, nr), tb.buf[:, 1:nc-1])
 end 
 	
-function getindex(tb::TemporalBuffer, i, t)
+function getindex(tb::TemporalBuffer{T}, i, t) where T
 	j = round(Int, floor(t/tb.dt))
-	return tb.buf[i, j]
+	return tb.buf[i, j+1]
 end 
 
-function set_index!(tb::TemporalBuffer, x, i)
+function setindex!(tb::TemporalBuffer{T}, x, i) where T
 	tb.buf[i, 1] = x
 end
 
-function Base.copy(tb::TemporalBuffer)
+function Base.copy(tb::TemporalBuffer{T}) where T
     return TemporalBuffer(tb.dt, copy(tb.buf))
 end 
