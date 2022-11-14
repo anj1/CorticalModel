@@ -55,6 +55,13 @@ function sim_step!(pop::NeuronPopulation, v::Vector{Float32}, weights::AbstractA
   # pop.v += ...
 end 
 
+
+function sim_step!(pop_pre::NeuronPopulation, pop_post::NeuronPopulation, weights::AbstractArray)
+	v = v_after_delay(pop_pre)
+	
+	sim_step!(pop_post, v, weights)
+end
+
 function sim_step!(net::NeuronNet)
 	new_pops = Dict{String, NeuronPopulation}()
 	
