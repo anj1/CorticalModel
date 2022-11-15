@@ -1,4 +1,4 @@
-function SetDelays(n_layer_dict, Network, timestep, NeuronPopulation())
+function set_delays(n_layer_dict, Network, timestep, NeuronPopulation())
 	for (key, value) in n_layer_dict
     		if occursin("E", key) == true
         		d = d_ex

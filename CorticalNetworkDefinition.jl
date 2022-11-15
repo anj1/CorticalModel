@@ -1,10 +1,13 @@
-module defineNetwork
+module CorticalNetworkDefinition
+
+export Network
+
 using CSV
 using DataFrames
 include("random_connectivity.jl")
 include("set_delays.jl")
-include("main.jl")
-export Network
+include("src/main.jl")
+
 ##### Define Network Parameters & Connectivity Table #####
 l_name = ["2/3E", "2/3I", "4E", "4I", "5E", "5I", "6E", "6I"]
 x = [1148, 324, 268, 60, 1216, 304, 800, 164, 657]
@@ -19,6 +22,7 @@ n_layer_dict = Dict(zip(l_name, n_layer))
 pA = 1
 ##### Create Network #####
 Network = NeuronNet()
-Connectivity() = addNetworkConnections(df, n_layer_dict, Network)
-Delays() = SetDelays(n_layer_dict, Network, NeuronPopulation())
+Connectivity() = add_network_connections(df, n_layer_dict, Network)
+Delays() = set_delays(n_layer_dict, Network, NeuronPopulation())
+
 end

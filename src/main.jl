@@ -1,4 +1,4 @@
-using Unitful 
+#using Unitful 
 
 include("temporal_buffer.jl")
 
@@ -56,14 +56,14 @@ function sim_step!(pop::NeuronPopulation, v::Vector{Float32}, weights::AbstractA
 end 
 
 
-function sim_step!(pop_pre::NeuronPopulation, pop_post::NeuronPopulation, weights::AbstractArray)
-	v = v_after_delay(pop_pre)
-	
-	sim_step!(pop_post, v, weights)
+function sim_step!(pop_post::NeuronPopulation, pop_pre::NeuronPopulation, weights::AbstractArray)
+    v = v_after_delay(pop_pre)
+
+    sim_step!(pop_post, v, weights)
 end
 
 function sim_step!(net::NeuronNet)
-	new_pops = Dict{String, NeuronPopulation}()
+    new_pops = Dict{String, NeuronPopulation}()
 	
 	pop_keys = keys(net.pops)
 	for pop_post_key in pop_keys

@@ -1,5 +1,0 @@
-include("defineNetwork.jl")
-Network = defineNetwork.Connectivity()
-print(size(Network.weights[("4E", "5E")]))
-#Network = defineNetwork.Delays()
-#print(Network.pops)
