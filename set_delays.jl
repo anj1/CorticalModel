@@ -1,4 +1,7 @@
-function set_delays(n_layer_dict, Network, timestep, NeuronPopulation())
+include("main.jl")
+include("temporal_buffer.jl")
+
+function set_delays(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, Network, timestep)
 	for (key, value) in n_layer_dict
     		if occursin("E", key) == true
         		d = d_ex
@@ -11,5 +14,5 @@ function set_delays(n_layer_dict, Network, timestep, NeuronPopulation())
     		delays=Float32.(rand(a, n_layer_dict[key]))
     		Network.pops[key] = NeuronPopulation(timestep, abs.(delays))
 	end
-	return network
+	return Network
 end

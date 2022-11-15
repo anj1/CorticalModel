@@ -1,5 +1,5 @@
 include("CorticalNetworkDefinition.jl")
-Network = CorticalNetworkDefinition.Connectivity()
-print(size(Network.weights[("4E", "5E")]))
-#Network = CorticalNetworkDefinition.Delays()
-#print(Network.pops)
+network = CorticalNetworkDefinition.connectivity
+print(size(network.weights[("4E", "5E")]))
+Network = CorticalNetworkDefinition.delays
+print(network.pops)
