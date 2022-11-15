@@ -4,6 +4,7 @@ using DataFrames
 include("random_connectivity.jl")
 include("set_delays.jl")
 include("main.jl")
+include("temporal_buffer.jl")
 export Network
 ##### Define Network Parameters & Connectivity Table #####
 l_name = ["2/3E", "2/3I", "4E", "4I", "5E", "5I", "6E", "6I"]
@@ -20,5 +21,5 @@ pA = 1
 ##### Create Network #####
 Network = NeuronNet()
 Connectivity() = addNetworkConnections(df, n_layer_dict, Network)
-Delays() = SetDelays(n_layer_dict, Network, NeuronPopulation())
+Delays() = SetDelays(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, Network, 1e-4)
 end
