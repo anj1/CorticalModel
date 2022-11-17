@@ -52,12 +52,12 @@ function sim_step!(pop::NeuronPopulation, v::Vector{Float32}, weights::AbstractA
     ### An outer for loop to do each individual neuron??
     if rt > 0 #Check if neutron is in refractory period (cannot spike)
         rt = rt - 1
-
     elseif v >= theta ###This is a spike
 	v = V_r ### Reset V
 	rt = tau_ref/dt
+    end
 
-    #### Need something like if pre v>=theta... then I_syn += w
+    #### Need something like if pre v>=theta... then I_syn += w ###Or put this in activation!?
 
     ### Changes in each time step
     dV = -(V-V_r)/tau_m + I_syn/C_m #Specify change in voltage
