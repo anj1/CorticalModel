@@ -1,4 +1,5 @@
 include("CorticalNetworkDefinition.jl")
+include("src/main.jl")
 network = CorticalNetworkDefinition.connectivity
-print(size(network.weights[("4E", "5E")]))
+print(size(network.weights[("2/3I", "5I")]))
 print(keys(network.pops))
