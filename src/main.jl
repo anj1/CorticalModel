@@ -55,6 +55,8 @@ function sim_step!(pop::NeuronPopulation, v::Vector{Float32}, weights::AbstractA
   # pop.v += ...
 end 
 
+function activation!(net::NeuronNet)
+end
 
 function sim_step!(pop_post::NeuronPopulation, pop_pre::NeuronPopulation, weights::AbstractArray)
     v = v_after_delay(pop_pre)
@@ -76,7 +78,7 @@ function sim_step!(net::NeuronNet)
             key = (pop_pre_key, pop_post_key)
             if key in keys(net.weights)
                 weights = net.weights[key]
-			
+
                 sim_step!(pop_post, pop_pre, weights)
             end
 		end 
@@ -84,6 +86,7 @@ function sim_step!(net::NeuronNet)
 		activation!(pop_post) 
 		
 		new_pops[pop_post_key] = pop_post 
+		
 	end 
 	
 	net.pops = new_pops 

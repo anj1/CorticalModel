@@ -1,6 +1,8 @@
 module CorticalNetworkDefinition
 
 export Network
+export NeuronPopulation
+export sim_step! 
 
 using CSV
 using DataFrames

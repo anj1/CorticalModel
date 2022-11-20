@@ -1,7 +1,20 @@
 using Random
+using SparseArrays
 
 function calculate_nsyn(src, tgt, prob, n_layer_dict)
 	return nsyn = round(Int, log(1.0-prob)/log(1.0 - (1.0/(n_layer_dict[src]*n_layer_dict[tgt]))))
+end
+
+function create_submatrix_sparse(src, tgt, prob, n_layer_dict, row_n)
+    pA = 1.0
+
+    weight = eval(Meta.parse(df[row_n,"Weight"]))
+    std = eval(Meta.parse(df[row_n,"Wstd"]))
+    @time submatrix = weight .+ (std.*sprandn(Float32, n_layer_dict[src], n_layer_dict[tgt], prob))
+
+    submatrix = convert(Array, submatrix)
+
+	return submatrix
 end
 
 function create_submatrix(src, tgt, prob, n_layer_dict, row_n)
