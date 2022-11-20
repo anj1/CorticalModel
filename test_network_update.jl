@@ -10,8 +10,8 @@ function CorticalNetworkDefinition.sim_step!(pop::NeuronPopulation, v::Vector{Fl
 
     # calculate v_out
     # v_out = your equation, including action potentials, ...
-    pop.v[:] += (v'*weights)'
-end 
+    pop.v[:] += (v' * weights)'
+end
 
 function CorticalNetworkDefinition.activation!(pop::NeuronPopulation)
     firing_threshold = -55e-3
@@ -20,16 +20,16 @@ function CorticalNetworkDefinition.activation!(pop::NeuronPopulation)
     for i = 1:length(pop.delays)
         if pop.v[i] > firing_threshold
             pop.v[i] = reset_v
-        end 
+        end
     end
 end
 
 
 @time sim_step!(network)
 
-println(network.pops["2/3E"].v.buf[:,1])
+println(network.pops["2/3E"].v.buf[:, 1])
 
 @time sim_step!(network)
 
-println(network.pops["2/3E"].v.buf[:,1])
-println(network.pops["2/3E"].v.buf[:,2])
+println(network.pops["2/3E"].v.buf[:, 1])
+println(network.pops["2/3E"].v.buf[:, 2])

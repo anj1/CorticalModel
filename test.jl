@@ -8,12 +8,12 @@ function sim_step!(pop::NeuronPopulation, v::Vector{Float32}, weights::AbstractA
     # v_out = your equation, including action potentials, ...
     # pop.v += ...
 
-    pop.v.buf[:,1] = weights*v
-end 
+    pop.v.buf[:, 1] = weights * v
+end
 
 function activation!(pop::NeuronPopulation)
-    
-end 
+
+end
 
 function test_pop_update()
     pop_pre = NeuronPopulation(1e-3, Float32[0, 1e-3])
@@ -24,7 +24,7 @@ function test_pop_update()
     sim_step!(pop_post, pop_pre, weights)
 
     @show pop_post.v
-end 
+end
 
 
 
@@ -34,17 +34,17 @@ function test_net_update()
 
     weights = randn(Float32, (3, 2))
 
-    
+
 
     net = NeuronNet()
-    net.pops["1"] = pop_pre 
+    net.pops["1"] = pop_pre
     net.pops["2"] = pop_post
-    net.weights[("1", "2")] = weights 
+    net.weights[("1", "2")] = weights
 
     sim_step!(net)
 
     @show net.pops["2"].v
-end 
+end
 
 test_pop_update()
 test_net_update()

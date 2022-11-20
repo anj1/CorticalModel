@@ -2,7 +2,7 @@ module CorticalNetworkDefinition
 
 export Network
 export NeuronPopulation
-export sim_step! 
+export sim_step!
 
 using CSV
 using DataFrames
@@ -17,10 +17,10 @@ x = [1148, 324, 268, 60, 1216, 304, 800, 164, 657]
 n_layer = [i * 9 for i in x]
 df = DataFrame(CSV.File("shimoura11_spatial.csv"))
 ##### Define Delay Parameters #####
-d_ex = 1.5e-3     	# Excitatory delay
-std_d_ex = 0.75e-3 	# Std. Excitatory delay
+d_ex = 1.5e-3     # Excitatory delay
+std_d_ex = 0.75e-3 # Std. Excitatory delay
 d_in = 0.80e-3      # Inhibitory delay
-std_d_in = 0.4e-3  	# Std. Inhibitory delay
+std_d_in = 0.4e-3  # Std. Inhibitory delay
 n_layer_dict = Dict(zip(l_name, n_layer))
 pA = 1
 ##### Create Network #####
