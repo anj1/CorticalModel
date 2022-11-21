@@ -23,6 +23,21 @@ function getindex(tb::TemporalBuffer{T}, i) where {T}
     return tb.buf[i, 1]
 end
 
+function getindex(tb::TemporalBuffer{T}, i, tr::StepRangeLen) where {T}
+    if tr.offset != 1
+        # TODO
+        throw(ArgumentError(""))
+    end 
+
+    if !isapprox(tb.dt, r.step)
+        # TODO
+        throw(ArgumentError(""))
+    end 
+
+    ref = round(Int, floor(tr.ref / tb.dt))
+    return tb.buf[i, (ref+1):(ref+tr.len)]
+end
+
 
 # implicitly assumes time=0)
 function setindex!(tb::TemporalBuffer{T}, x, i) where {T}

@@ -51,23 +51,23 @@ end
 
 function sim_step!(pop::NeuronPopulation, spike::SparseVector{Float32,}, weights::AbstractArray)
     # update postsynaptic population given incident voltages
-    pop.current += spike*weights
+    pop.current += weights*spike
 
     ### Changes in each time step
-    dV += -(pop.voltage - reset_voltage_V) / time_constant_memb_τ + pop.current / membrane_capacitance_C #Specify change in voltage
-    dI_syn = -pop.current / time_constant_syn_τ #Specify change in I_syn
+    dvoltage = ((reset_voltage_V .- pop.voltage ) / time_constant_memb_τ) .+ (pop.current / membrane_capacitance_C) #Specify change in voltage
+    dcurrent = -pop.current / time_constant_syn_τ #Specify change in I_syn
 
     # calculate v_out
     # v_out = voltage + dV??
-    pop.voltage += dV * pop.dt
-    pop.current += dI_syn * pop.dt
+    pop.voltage .+= dvoltage * pop.dt
+    pop.current .+= dcurrent * pop.dt
 end
 
 function activation!(pop::NeuronPopulation)
     n = length(pop.voltage)
 
     for i = 1:n
-        if sum(pop.spike[i, 0.0:refractory_time_t]) == 0.0f0 && pop.voltage[i] > threshold_θ
+        if sum(pop.spike[i, 0.0:pop.dt:refractory_time_t]) == 0.0f0 && pop.voltage[i] > threshold_θ
             pop.spike[i] = 1.0f0
             pop.voltage[i] = reset_voltage_V
         end

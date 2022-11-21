@@ -16,19 +16,19 @@ l_name = ["2/3E", "2/3I", "4E", "4I", "5E", "5I", "6E", "6I"]
 x = [1148, 324, 268, 60, 1216, 304, 800, 164, 657]
 n_layer = [i * 9 for i in x]
 df = DataFrame(CSV.File("shimoura11_spatial.csv"))
-threshold_θ = -50e-3 
-membrane_capacitance_C = 250e-12 
-reset_voltage_V = -65e-3 
-time_constant_memb_τ = 10e-3 
-time_constant_syn_τ = 10e-3
-refractory_time_t = 2e-3 
+threshold_θ = -50f-3 
+membrane_capacitance_C = 250f-12 
+reset_voltage_V = -65f-3 
+time_constant_memb_τ = 10f-3 
+time_constant_syn_τ = 10f-3
+refractory_time_t = 2f-3 
 
 
 ##### Define Delay Parameters #####
-d_ex = 1.5e-3     # Excitatory delay
-std_d_ex = 0.75e-3 # Std. Excitatory delay
-d_in = 0.80e-3      # Inhibitory delay
-std_d_in = 0.4e-3  # Std. Inhibitory delay
+d_ex = 1.5f-3     # Excitatory delay
+std_d_ex = 0.75f-3 # Std. Excitatory delay
+d_in = 0.80f-3      # Inhibitory delay
+std_d_in = 0.4f-3  # Std. Inhibitory delay
 n_layer_dict = Dict(zip(l_name, n_layer))
 pA = 1
 ##### Create Network #####
