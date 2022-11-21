@@ -127,7 +127,9 @@ function create_submatrix(n_layer_dict, src, tgt, nsyn, src_idx, tgt_idx, std, w
 end
 
 
-function add_network_connections(df, n_layer_dict, network, type)
+function create_network_connections(df, n_layer_dict, type)
+    weights = Dict{Tuple{String,String},Array}()
+
     #This function adds connections to the neural network
     num_conn = size(df)[1]
     pA = 1.0
@@ -145,9 +147,9 @@ function add_network_connections(df, n_layer_dict, network, type)
         elseif type == "Random"
             src_idx, tgt_idx = random_connections(n_layer_dict, src, tgt, nsyn)
         end
-        network.weights[(src, tgt)] = create_submatrix(n_layer_dict, src, tgt, nsyn, src_idx, tgt_idx, std, weight)
+        weights[(src, tgt)] = create_submatrix(n_layer_dict, src, tgt, nsyn, src_idx, tgt_idx, std, weight)
     end
-    return network
+    return weights
 end
 
 

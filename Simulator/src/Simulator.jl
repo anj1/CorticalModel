@@ -13,8 +13,8 @@ struct NeuronPopulation
     delays
     dt
 
-    function NeuronPopulation(voltage, current, spike::TemporalBuffer{Float32}, delays, dt)
-        new(voltage, current, spike, delays, dt)
+    function NeuronPopulation(voltage, current, spike::TemporalBuffer{Float32}, delays)
+        new(voltage, current, spike, delays)
     end
 end
 
@@ -25,7 +25,7 @@ function NeuronPopulation(dt, delays)
     max_timesteps = ceil(round(Int, max_time / dt))
 
     tb = TemporalBuffer{Float32}(dt, spzeros(Float32, n_neurons, max_timesteps + 1))
-    return NeuronPopulation(zeros(Float32, n), zeros(Float32, n), tb, delays, dt)
+    return NeuronPopulation(zeros(Float32, n), zeros(Float32, n), tb, delays)
 end
 
 function Base.copy(pop::NeuronPopulation)
@@ -36,11 +36,15 @@ mutable struct NeuronNet
     pops::Dict{String,NeuronPopulation}
     weights::Dict{Tuple{String,String},AbstractArray}
 
-    function NeuronNet()
-        pops = Dict{String,NeuronPopulation}()
-        weights = Dict{Tuple{String,String},AbstractArray}()
+    function NeuronNet(pops, weights)
         new(pops, weights)
     end
+end
+
+function NeuronNet()
+    pops = Dict{String,NeuronPopulation}()
+    weights = Dict{Tuple{String,String},AbstractArray}()
+    new(pops, weights)
 end
 
 function spike_after_delay(pop::NeuronPopulation)
@@ -63,15 +67,15 @@ function sim_step!(pop::NeuronPopulation, spike::SparseVector{Float32,}, weights
 
     # calculate v_out
     # v_out = voltage + dV??
-    pop.voltage .+= dvoltage * pop.dt
-    pop.current .+= dcurrent * pop.dt
+    pop.voltage .+= dvoltage * pop.spike.dt 
+    pop.current .+= dcurrent * pop.spike.dt 
 end
 
 function activation!(pop::NeuronPopulation)
     n = length(pop.voltage)
 
     for i = 1:n
-        if sum(pop.spike[i, 0.0f0:pop.dt:refractory_time_t]) == 0.0f0 && pop.voltage[i] > threshold_θ
+        if sum(pop.spike[i, 0.0f0:pop.spike.dt:refractory_time_t]) == 0.0f0 && pop.voltage[i] > threshold_θ
             pop.spike[i] = 1.0f0
             pop.voltage[i] = reset_voltage_V
         end
