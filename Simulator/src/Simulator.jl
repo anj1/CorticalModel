@@ -1,4 +1,8 @@
-#using Unitful 
+module Simulator 
+
+export TemporalBuffer
+export NeuronPopulation, NeuronNet
+export sim_step!, activation!
 
 include("temporal_buffer.jl")
 
@@ -67,7 +71,7 @@ function activation!(pop::NeuronPopulation)
     n = length(pop.voltage)
 
     for i = 1:n
-        if sum(pop.spike[i, 0.0:pop.dt:refractory_time_t]) == 0.0f0 && pop.voltage[i] > threshold_θ
+        if sum(pop.spike[i, 0.0f0:pop.dt:refractory_time_t]) == 0.0f0 && pop.voltage[i] > threshold_θ
             pop.spike[i] = 1.0f0
             pop.voltage[i] = reset_voltage_V
         end
@@ -106,4 +110,7 @@ function sim_step!(net::NeuronNet)
     end
 
     net.pops = new_pops
+end
+
+
 end

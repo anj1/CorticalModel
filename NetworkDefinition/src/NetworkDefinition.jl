@@ -1,15 +1,14 @@
 module CorticalNetworkDefinition
 
-export Network
-export NeuronPopulation
-export sim_step!
+export make_default_net
 
 using CSV
 using DataFrames
-include("src/connectivity.jl")
+
+using Simulator 
+
+include("connectivity.jl")
 include("set_delays.jl")
-include("src/main.jl")
-include("src/temporal_buffer.jl")
 
 ##### Define Network Parameters & Connectivity Table #####
 l_name = ["2/3E", "2/3I", "4E", "4I", "5E", "5I", "6E", "6I"]
@@ -34,10 +33,10 @@ pA = 1
 ##### Create Network #####
 
 function make_default_net()
-    Network = NeuronNet()
+    network = NeuronNet()
 
-    connectivity = add_network_connections(df, n_layer_dict, Network, "Random")
-    delays = set_delays(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, Network, 1e-4)
+    connectivity = add_network_connections(df, n_layer_dict, network, "Random")
+    delays = set_delays(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, network, 1e-4)
 
     return connectivity, delays
 end 
