@@ -1,0 +1,7 @@
+name = "Simulator"
+uuid = "ea4cf48a-6a81-4397-9c98-9ce6ad25e03f"
+authors = [""]
+version = "0.1.0"
+
+[deps]
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"

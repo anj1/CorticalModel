@@ -1,5 +1,7 @@
 module Simulator 
 
+using SparseArrays
+
 export TemporalBuffer
 export NeuronPopulation, NeuronNet
 export sim_step!, activation!

@@ -19,8 +19,6 @@ function test_net_update()
 
     weights = randn(Float32, (3, 2))
 
-
-
     net = NeuronNet()
     net.pops["1"] = pop_pre
     net.pops["2"] = pop_post

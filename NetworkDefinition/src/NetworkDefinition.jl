@@ -1,4 +1,4 @@
-module CorticalNetworkDefinition
+module NetworkDefinition
 
 export create_default_net
 
