@@ -89,16 +89,16 @@ function activation!(pop::NeuronPopulation, params)
 end
 
 function sim_step!(net::NeuronNet)
-    pop_keys = keys(net.pops)
+    pop_keys = collect(keys(net.pops))
 
     delayed_spikes = Dict(key => spike_after_delay(net.pops[key]) for key in pop_keys)
 
-    for pop_post_key in pop_keys
+    @sync @distributed for pop_post_key in pop_keys
         pop_post = net.pops[pop_post_key]
 
         advance!(pop_post.spike)
 
-        @distributed for pop_pre_key in pop_keys
+        for pop_pre_key in pop_keys
             spikes = delayed_spikes[pop_pre_key]
 
             key = (pop_pre_key, pop_post_key)
