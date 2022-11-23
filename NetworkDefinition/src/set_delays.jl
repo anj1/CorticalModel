@@ -19,7 +19,7 @@ end
 
 function create_input(net, n_layer_dict, timestep)
     println("create input pop")
-	input_pop = NeuronPopulation(timestep, zeros(Float32, n_layer_dict["2/3E"]))
+    input_pop = NeuronPopulation(timestep, zeros(Float32, n_layer_dict["2/3E"]))
     println("define spikes")
     println(size(input_pop.spike.buf))
     #input_pop.spike.buf = zeros(Float32, n_layer_dict["2/3E"])

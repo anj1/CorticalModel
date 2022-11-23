@@ -9,8 +9,8 @@ mutable struct TemporalBuffer{T}
 end
 
 function time_length(tb::TemporalBuffer{T}) where {T}
-	return tb.dt*(size(tb.buf,2)-1)
-end 
+    return tb.dt * (size(tb.buf, 2) - 1)
+end
 
 function advance!(tb::TemporalBuffer{T}) where {T}
     nr, nc = size(tb.buf)
@@ -31,12 +31,12 @@ function getindex(tb::TemporalBuffer{T}, i, tr::StepRangeLen) where {T}
     if tr.offset != 1
         # TODO
         throw(ArgumentError(""))
-    end 
+    end
 
     if !isapprox(tb.dt, tr.step)
         # TODO
         throw(ArgumentError(""))
-    end 
+    end
 
     ref = round(Int, floor(tr.ref / tb.dt))
     return tb.buf[i, (ref+1):(ref+tr.len)]
