@@ -12,10 +12,16 @@ include("set_delays.jl")
 
 
 function create_default_network()
+    # Units:
+    # current: pA,
+    # capacitance: pF
+    # voltage: V
+    # time: s
+
     ##### Define Network Parameters #####
     params = Dict(
-        :threshold_θ => -50.0f-3,
-        :membrane_capacitance_C => 250.0f-12,
+        :threshold_θ => -50.0f-3, # in V
+        :membrane_capacitance_C => 250.0f0,  # in pF
         :reset_voltage_V => -65.0f-3,
         :time_constant_memb_τ => 10.0f-3,
         :time_constant_syn_τ => 10.0f-3,

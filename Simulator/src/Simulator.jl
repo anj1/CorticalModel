@@ -96,8 +96,6 @@ function sim_step!(net::NeuronNet)
     @sync @distributed for pop_post_key in pop_keys
         pop_post = net.pops[pop_post_key]
 
-        advance!(pop_post.spike)
-
         for pop_pre_key in pop_keys
             spikes = delayed_spikes[pop_pre_key]
 
@@ -107,6 +105,7 @@ function sim_step!(net::NeuronNet)
             end
         end
 
+        advance!(pop_post.spike)
         activation!(pop_post, net.params)
     end
 end
