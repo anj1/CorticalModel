@@ -1,6 +1,6 @@
 module NetworkDefinition
 
-export create_default_network
+export create_default_network, add_input
 
 using CSV
 using DataFrames
@@ -37,12 +37,20 @@ function create_default_network()
 
     df = DataFrame(CSV.File("NetworkDefinition/data/shimoura11_spatial.csv"))
 
-    populations = create_populations(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, 1e-4)
+    populations = create_neuron_populations(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, 1e-4)
     weights = create_network_connections(df, n_layer_dict, "Random")
-
     return NeuronNet(populations, weights, params)
 end 
 
+function add_input(network)
+	l_name = ["2/3E", "2/3I", "4E", "4I", "5E", "5I", "6E", "6I"]
+    x = [1148, 324, 268, 60, 1216, 304, 800, 164, 657]
+    n_layer = [i * 9 for i in x]
 
+    n_layer_dict = Dict(zip(l_name, n_layer))
+
+	network = create_input(network, n_layer_dict, 1e-4)
+	return network
+end
 
 end
