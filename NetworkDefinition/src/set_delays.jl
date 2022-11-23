@@ -1,4 +1,4 @@
-function create_neuron_populations(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, timestep)
+function create_neuron_populations(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, timestep, reset_V)
     pops = Dict{String,NeuronPopulation}()
 
     for (key, _) in n_layer_dict
@@ -12,6 +12,7 @@ function create_neuron_populations(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict,
         end
         delays = Float32.(d_std * randn(n_layer_dict[key]))
         pops[key] = NeuronPopulation(timestep, abs.(delays))
+        pops[key].voltage[:] .= reset_V
     end
 
     return pops

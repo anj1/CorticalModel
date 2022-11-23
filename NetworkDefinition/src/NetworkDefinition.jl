@@ -43,7 +43,7 @@ function create_default_network()
 
     df = DataFrame(CSV.File("NetworkDefinition/data/shimoura11_spatial.csv"))
 
-    populations = create_neuron_populations(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, 1e-4)
+    populations = create_neuron_populations(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, 1e-4, params[:reset_voltage_V])
     weights = create_network_connections(df, n_layer_dict, "Random")
     return NeuronNet(populations, weights, params)
 end
