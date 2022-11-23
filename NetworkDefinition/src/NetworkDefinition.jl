@@ -24,7 +24,7 @@ function create_default_network()
         :membrane_capacitance_C => 250.0f0,  # in pF
         :reset_voltage_V => -65.0f-3,
         :time_constant_memb_τ => 10.0f-3,
-        :time_constant_syn_τ => 10.0f-3,
+        :time_constant_syn_τ => 5.0f-4,
         :refractory_time_t => 2.0f-3
     )
 
