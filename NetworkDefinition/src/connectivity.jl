@@ -117,10 +117,10 @@ end
 
 function create_submatrix(n_layer_dict, src, tgt, nsyn, src_idx, tgt_idx, std, weight)
     #This function creates connectivity matrices for each population based connection 
-    submatrix = zeros(Float32, (n_layer_dict[src], n_layer_dict[tgt]))
+    submatrix = zeros(Float32, (n_layer_dict[tgt], n_layer_dict[src]))
 
     for i in 1:nsyn
-        submatrix[round(Int, src_idx[i]), round(Int, tgt_idx[i])] += std * randn() + weight
+        submatrix[round(Int, tgt_idx[i]), round(Int, src_idx[i])] += std * randn() + weight
     end
 
     return submatrix

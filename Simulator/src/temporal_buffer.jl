@@ -8,6 +8,10 @@ mutable struct TemporalBuffer{T}
     buf::AbstractArray{T,2}
 end
 
+function time_length(tb::TemporalBuffer{T}) where {T}
+	return tb.dt*(size(tb.buf,2)-1)
+end 
+
 function advance!(tb::TemporalBuffer{T}) where {T}
     nr, nc = size(tb.buf)
     tb.buf = hcat(zeros(T, nr), tb.buf[:, 1:nc-1])
@@ -29,7 +33,7 @@ function getindex(tb::TemporalBuffer{T}, i, tr::StepRangeLen) where {T}
         throw(ArgumentError(""))
     end 
 
-    if !isapprox(tb.dt, r.step)
+    if !isapprox(tb.dt, tr.step)
         # TODO
         throw(ArgumentError(""))
     end 

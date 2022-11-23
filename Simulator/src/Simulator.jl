@@ -12,25 +12,25 @@ struct NeuronPopulation
     voltage::Vector{Float32}
     current::Vector{Float32}
     spike::TemporalBuffer{Float32}
-    delays
+    delays::Vector{Float32}
 
     function NeuronPopulation(voltage, current, spike::TemporalBuffer{Float32}, delays)
         new(voltage, current, spike, delays)
     end
 end
 
-function NeuronPopulation(dt, delays)
+function NeuronPopulation(dt::Real, delays::Vector{Float32})
     max_time = maximum(delays)
     n = length(delays)
 
     max_timesteps = ceil(round(Int, max_time / dt))
 
-    tb = TemporalBuffer{Float32}(dt, spzeros(Float32, n, max_timesteps + 1))
+    tb = TemporalBuffer{Float32}(convert(Float32, dt), spzeros(Float32, n, max_timesteps + 1))
     return NeuronPopulation(zeros(Float32, n), zeros(Float32, n), tb, delays)
 end
 
 function Base.copy(pop::NeuronPopulation)
-    return NeuronPopulation(copy(pop.spike), copy(pop.delays))
+    return NeuronPopulation(copy(pop.voltage), copy(pop.current), copy(pop.spike), copy(pop.delays))
 end
 
 mutable struct NeuronNet
@@ -62,6 +62,7 @@ end
 
 function sim_step!(pop::NeuronPopulation, spike::SparseVector{Float32,}, weights::AbstractArray, params)
     # update postsynaptic population given incident voltages
+
     pop.current[:] += weights*spike
 
     ### Changes in each time step
@@ -79,7 +80,8 @@ function activation!(pop::NeuronPopulation, params)
     n = length(pop.voltage)
 
     for i = 1:n
-		refr_time = 0.0f0:pop.spike.dt:params[:refractory_time_t]
+		max_t = min(params[:refractory_time_t], time_length(pop.spike))
+		refr_time = 0.0f0:pop.spike.dt:max_t
         if sum(pop.spike[i, refr_time]) == 0.0f0 && pop.voltage[i] > params[:threshold_θ]
             pop.spike[i] = 1.0f0
             pop.voltage[i] = params[:reset_voltage_V]
