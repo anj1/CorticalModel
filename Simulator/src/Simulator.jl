@@ -63,6 +63,14 @@ function rand_inputs!(pop::NeuronPopulation, cur, rate)
     x_u = rand(length(pop.current))
     x_e = -rate*log.(x_u)  # exponential random var with rate
     cur_in = cur*round.(Int, x_e)  # make discrete spikes, and scale by cur
+    #freq = 15
+    #n = (rate/pop.spike.dt)/freq
+    #p = freq*pop.spike.dt
+    #a = sqrt(n*p*(1-p))
+    #b = n*p
+    #x_u = randn(round(Int, n))
+    #x_e = a.*x_u .+b
+    #cur_in = cur*round.(Int, x_e)  # make discrete spikes, and scale by cur
     pop.current[:] += cur_in
 end 
 
