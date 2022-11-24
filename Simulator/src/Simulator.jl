@@ -1,7 +1,6 @@
 module Simulator
 
 using SparseArrays
-using Distributed 
 
 export TemporalBuffer
 export NeuronPopulation, NeuronNet
@@ -104,7 +103,7 @@ function sim_step!(net::NeuronNet, inputs=Dict{Symbol,}())
 
     delayed_spikes = Dict(key => spike_after_delay(net.pops[key]) for key in pop_keys)
 
-    @sync @distributed for pop_post_key in pop_keys
+    Threads.@threads for pop_post_key in pop_keys
         pop_post = net.pops[pop_post_key]
 
         if pop_post_key in keys(inputs)

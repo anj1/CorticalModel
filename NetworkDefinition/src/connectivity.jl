@@ -133,7 +133,7 @@ function create_network_connections(df, n_layer_dict, type)
     #This function adds connections to the neural network
     num_conn = size(df)[1]
 
-    for row_n in 1:num_conn
+    Threads.@threads for row_n in 1:num_conn
         weight = Meta.parse(df[row_n, "Weight"]).args[2] # TODO: this is kind of dangerous as it assumes it's given in pA... 
 
         std = Meta.parse(df[row_n, "Wstd"]).args[2]
