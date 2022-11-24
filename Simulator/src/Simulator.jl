@@ -14,7 +14,7 @@ struct NeuronPopulation
     current::Vector{Float32}
     spike::TemporalBuffer{Float32}
     delays::Vector{Float32}
-
+    
     function NeuronPopulation(voltage, current, spike::TemporalBuffer{Float32}, delays)
         new(voltage, current, spike, delays)
     end
@@ -34,7 +34,7 @@ mutable struct NeuronNet
     pops::Dict{String,NeuronPopulation}
     weights::Dict{Tuple{String,String},AbstractArray}
     params::Dict{Symbol,Float32}
-
+    
     function NeuronNet(pops, weights, params)
         new(pops, weights, params)
     end
@@ -56,6 +56,16 @@ function spike_after_delay(pop::NeuronPopulation)
 
     return spike
 end
+
+"""
+Add random input currents to the neuron with a given current and rate
+"""
+function rand_inputs!(pop::NeuronPopulation, cur, rate)
+    x_u = rand(length(pop.current))
+    x_e = -rate*log.(x_u)  # exponential random var with rate
+    cur_in = cur*round.(Int, x_e)  # make discrete spikes, and scale by cur
+    pop.current[:] += cur_in
+end 
 
 # Update voltages/currents for the neuron population.
 function sim_step!(pop::NeuronPopulation, spike::SparseVector{Float32,}, weights::AbstractArray, params)
@@ -88,13 +98,19 @@ function activation!(pop::NeuronPopulation, params)
     end
 end
 
-function sim_step!(net::NeuronNet)
+function sim_step!(net::NeuronNet, inputs=Dict{Symbol,}())
+
     pop_keys = collect(keys(net.pops))
 
     delayed_spikes = Dict(key => spike_after_delay(net.pops[key]) for key in pop_keys)
 
     @sync @distributed for pop_post_key in pop_keys
         pop_post = net.pops[pop_post_key]
+
+        if pop_post_key in keys(inputs)
+            cur, rate = inputs[pop_post_key]
+            rand_inputs!(pop_post, cur, rate*pop_post.spike.dt)
+        end
 
         for pop_pre_key in pop_keys
             spikes = delayed_spikes[pop_pre_key]
