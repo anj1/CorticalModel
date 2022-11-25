@@ -36,7 +36,7 @@ function create_default_network()
 
     ##### Define connectivity table #####
     l_name = ["2/3E", "2/3I", "4E", "4I", "5E", "5I", "6E", "6I"]
-    x = [1148, 324, 268, 60, 1216, 304, 800, 164, 657]
+    x = [1148, 324, 268, 60, 1216, 304, 800, 164]
     n_layer = [i * 9 for i in x]
 
     n_layer_dict = Dict(zip(l_name, n_layer))
@@ -50,7 +50,7 @@ end
 
 function add_input(network)
     l_name = ["2/3E", "2/3I", "4E", "4I", "5E", "5I", "6E", "6I"]
-    x = [1148, 324, 268, 60, 1216, 304, 800, 164, 657]
+    x = [1148, 324, 268, 60, 1216, 304, 800, 164]
     n_layer = [i * 9 for i in x]
 
     n_layer_dict = Dict(zip(l_name, n_layer))
