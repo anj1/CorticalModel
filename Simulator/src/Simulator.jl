@@ -63,23 +63,16 @@ function rand_inputs!(pop::NeuronPopulation, cur, rate)
     x_u = rand(length(pop.current))
     x_e = -rate*log.(x_u)  # exponential random var with rate
     cur_in = cur*round.(Int, x_e)  # make discrete spikes, and scale by cur
-    #freq = 15
-    #n = (rate/pop.spike.dt)/freq
-    #p = freq*pop.spike.dt
-    #a = sqrt(n*p*(1-p))
-    #b = n*p
-    #x_u = randn(round(Int, n))
-    #x_e = a.*x_u .+b
-    #cur_in = cur*round.(Int, x_e)  # make discrete spikes, and scale by cur
     pop.current[:] += cur_in
 end 
 
 # Update voltages/currents for the neuron population.
-function sim_step!(pop::NeuronPopulation, spike::SparseVector{Float32,}, weights::AbstractArray, params)
+function sim_syn_step!(pop::NeuronPopulation, spike::SparseVector{Float32,}, weights::AbstractArray)
     # update postsynaptic population given incident voltages
-
     pop.current[:] += weights * spike
+end
 
+function sim_step!(pop::NeuronPopulation, params)
     ### Changes in each time step
     dvoltage_c = pop.current / params[:membrane_capacitance_C]
     dvoltage = ((params[:reset_voltage_V] .- pop.voltage) / params[:time_constant_memb_τ]) .+ dvoltage_c #Specify change in voltage
@@ -89,7 +82,7 @@ function sim_step!(pop::NeuronPopulation, spike::SparseVector{Float32,}, weights
     # v_out = voltage + dV??
     pop.voltage[:] += dvoltage * pop.spike.dt
     pop.current[:] += dcurrent * pop.spike.dt
-end
+end 
 
 # Update spike output for the neuron population.
 function activation!(pop::NeuronPopulation, params)
@@ -124,10 +117,11 @@ function sim_step!(net::NeuronNet, inputs=Dict{Symbol,}())
 
             key = (pop_pre_key, pop_post_key)
             if key in keys(net.weights) 
-                sim_step!(pop_post, spikes, net.weights[key], net.params)
+                sim_syn_step!(pop_post, spikes, net.weights[key])
             end
         end
 
+        sim_step!(pop_post, net.params)
         advance!(pop_post.spike)
         activation!(pop_post, net.params)
     end

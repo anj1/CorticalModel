@@ -11,10 +11,10 @@ net = create_default_network()
 
 # Give population 2/3E a set of inputs with synaptic current 80.0 pA,
 # and collective firing rate of 8 Hz x 2000 synapses
-inputs = Dict("2/3E" => (87.8, 12f0*2000), "2/3I" => (87.8, 12f0*1850),
-              "4E" => (87.8, 12f0*2000), "4I" => (87.8, 12f0*1850), 
-              "5E" => (87.8, 12f0*2000), "5I" => (87.8, 12f0*1850),
-              "6E" => (87.8, 12f0*2000), "6I" => (87.8, 12f0*1850))
+inputs = Dict("2/3E" => (87.8, 8f0*2000), "2/3I" => (87.8, 8f0*1850),
+              "4E" => (87.8, 8f0*2000), "4I" => (87.8, 8f0*1850), 
+              "5E" => (87.8, 8f0*2000), "5I" => (87.8, 8f0*1850),
+              "6E" => (87.8, 8f0*2000), "6I" => (87.8, 8f0*1850))
 
 sim_time = 0.25 #seconds
 timesteps = round(Int, sim_time/1e-4)
