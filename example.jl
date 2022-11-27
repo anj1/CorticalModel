@@ -9,7 +9,7 @@ using SparseArrays
 using Statistics
 using Plots
 
-net = create_default_network()
+net = create_default_network("Random")
 
 # Give population 2/3E a set of inputs with synaptic current 80.0 pA,
 # and collective firing rate of 8 Hz x 2000 synapses
