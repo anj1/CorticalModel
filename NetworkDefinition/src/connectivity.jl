@@ -133,6 +133,8 @@ function create_network_connections(df, n_layer_dict, type)
     #This function adds connections to the neural network
     num_conn = size(df)[1]
 
+    freq_array = []
+
     Threads.@threads for row_n in 1:num_conn
         weight = Meta.parse(df[row_n, "Weight"]).args[2] # TODO: this is kind of dangerous as it assumes it's given in pA... 
 
@@ -145,8 +147,14 @@ function create_network_connections(df, n_layer_dict, type)
         #pA = u"pA"
         if type == "Spatial"
             src_idx, tgt_idx = spatial_connections(n_layer_dict, src, tgt, nsyn)
+	    tgt_dict = countmap([x for x in tgt_idx])
+	    v = [v for v in values(tgt_dict)]
+	    append!(freq_array, v)
         elseif type == "Random"
             src_idx, tgt_idx = random_connections(n_layer_dict, src, tgt, nsyn)
+	    tgt_dict = countmap([x for x in tgt_idx])
+	    v = [v for v in values(tgt_dict)]
+	    append!(freq_array, v)
         end
         weights[(src, tgt)] = create_submatrix(n_layer_dict, src, tgt, nsyn, src_idx, tgt_idx, std, weight)
     end
