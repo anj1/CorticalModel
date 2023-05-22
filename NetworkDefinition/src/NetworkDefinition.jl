@@ -11,7 +11,7 @@ include("connectivity.jl")
 include("set_delays.jl")
 
 
-function create_default_network(con_type="Random"; def_path==nothing)
+function create_default_network(con_type="Random"; def_path=nothing)
     # Units:
     # current: pA,
     # capacitance: pF
