@@ -11,7 +11,7 @@ include("connectivity.jl")
 include("set_delays.jl")
 
 
-function create_default_network(con_type="Random")
+function create_default_network(con_type="Random", def_path==nothing)
     # Units:
     # current: pA,
     # capacitance: pF
@@ -41,7 +41,10 @@ function create_default_network(con_type="Random")
 
     n_layer_dict = Dict(zip(l_name, n_layer))
 
-    df = DataFrame(CSV.File("NetworkDefinition/data/shimoura11_spatial.csv"))
+    if def_path == nothing
+        def_path = joinpath(dirname(dirname(pathof(NetworkDefinition))), "data", "shimoura11_spatial.csv")
+    end
+    df = DataFrame(CSV.File(def_path))
 
     populations = create_neuron_populations(d_ex, std_d_ex, d_in, std_d_in, n_layer_dict, 1e-4, params[:reset_voltage_V])
     weights = create_network_connections(df, n_layer_dict, con_type)
